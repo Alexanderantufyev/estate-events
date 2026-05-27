@@ -100,13 +100,8 @@ async function publishVk(text: string, mediaUrl?: string) {
 
   const isImage = mediaUrl && /\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i.test(mediaUrl)
   if (isImage) {
-    try {
-      const attachment = await uploadPhotoToVk(mediaUrl, token, groupId)
-      params.set('attachments', attachment)
-    } catch {
-      // Fallback: append URL as text if photo upload fails
-      params.set('message', `${text}\n\n${mediaUrl}`)
-    }
+    const attachment = await uploadPhotoToVk(mediaUrl, token, groupId)
+    params.set('attachments', attachment)
   } else if (mediaUrl) {
     params.set('message', `${text}\n\n${mediaUrl}`)
   }
