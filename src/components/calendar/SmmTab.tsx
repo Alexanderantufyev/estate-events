@@ -117,7 +117,7 @@ export function SmmTab({ posts, onChange }: SmmTabProps) {
                   {post.scheduledAt && (
                     <span className="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400">
                       <Clock size={10} />
-                      {post.scheduledAt}
+                      {formatScheduled(post.scheduledAt)}
                     </span>
                   )}
                   <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${SMM_STATUS_COLORS[post.status]}`}>
@@ -224,11 +224,11 @@ export function SmmTab({ posts, onChange }: SmmTabProps) {
             </div>
           </div>
 
-          {/* Scheduled time */}
+          {/* Scheduled date + time */}
           <div>
-            <label className="text-[10px] text-slate-400 mb-0.5 block">Время публикации</label>
+            <label className="text-[10px] text-slate-400 mb-0.5 block">Дата и время публикации</label>
             <input
-              type="time"
+              type="datetime-local"
               value={draft.scheduledAt}
               onChange={(e) => setDraft((d) => d ? { ...d, scheduledAt: e.target.value } : d)}
               className="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-all"
@@ -297,6 +297,17 @@ export function SmmTab({ posts, onChange }: SmmTabProps) {
       )}
     </div>
   )
+}
+
+function formatScheduled(value: string): string {
+  if (!value) return ''
+  // datetime-local format: YYYY-MM-DDTHH:MM
+  if (value.includes('T')) {
+    const [datePart, timePart] = value.split('T')
+    const [year, month, day] = datePart.split('-')
+    return `${day}.${month}.${year} ${timePart}`
+  }
+  return value
 }
 
 function isImageUrl(url: string): boolean {
