@@ -138,7 +138,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
     const cleanTimeline = timeline
       .filter((t) => t.title.trim())
       .sort((a, b) => a.time.localeCompare(b.time))
-    const newId = addEvent({
+    addEvent({
       title: title.trim() || 'Мероприятие',
       date,
       time: cleanTimeline[0]?.time || '12:00',
@@ -156,7 +156,6 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
     })
     toast.success('Мероприятие добавлено')
     onClose()
-    setSelectedEventId(newId)
   }
 
   const hasAnyData = metrics.totalRevenue > 0 || metrics.totalExpenses > 0
