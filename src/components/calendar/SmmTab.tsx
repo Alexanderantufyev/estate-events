@@ -90,9 +90,30 @@ export function SmmTab({ posts, onChange }: SmmTabProps) {
     navigator.clipboard.writeText(text).then(() => toast.success('Скопировано в буфер'))
   }
 
-  const openPlatform = (post: SmmPost) => {
-    copyPost(post)
-    window.open(PLATFORM_URLS[post.platform], '_blank')
+  const publishNow = async (post: SmmPost) => {
+    if (post.platform === 'instagram') {
+      copyPost(post)
+      window.open(PLATFORM_URLS[post.platform], '_blank')
+      toast('Instagram: пост скопирован, вставьте вручную', { icon: '📋' })
+      return
+    }
+    const toastId = toast.loading('Публикую...')
+    try {
+      const res = await fetch('/api/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ platform: post.platform, text: post.text, mediaUrl: post.mediaUrl }),
+      })
+      const data = await res.json()
+      if (data.ok) {
+        onChange(posts.map((p) => p.id === post.id ? { ...p, status: 'published' as const } : p))
+        toast.success('Опубликовано!', { id: toastId })
+      } else {
+        toast.error(data.error || 'Ошибка публикации', { id: toastId })
+      }
+    } catch {
+      toast.error('Нет связи с сервером', { id: toastId })
+    }
   }
 
   const cancelEdit = () => {
@@ -153,9 +174,9 @@ export function SmmTab({ posts, onChange }: SmmTabProps) {
                     <Pencil size={12} />
                   </button>
                   <button
-                    onClick={() => openPlatform(post)}
+                    onClick={() => publishNow(post)}
                     className="p-1.5 text-slate-400 hover:text-blue-500 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-                    title="Скопировать и открыть платформу"
+                    title="Опубликовать сейчас"
                   >
                     <Send size={12} />
                   </button>

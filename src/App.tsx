@@ -4,9 +4,11 @@ import { Layout } from './components/layout/Layout'
 import { CalendarPage } from './components/calendar/CalendarPage'
 import { AnalyticsDashboard } from './components/analytics/AnalyticsDashboard'
 import { useEventStore } from './store/eventStore'
+import { usePostScheduler } from './hooks/usePostScheduler'
 
 export default function App() {
   const { isDarkMode, isAnalyticsView } = useEventStore()
+  usePostScheduler()
 
   useEffect(() => {
     if (isDarkMode) {

@@ -15,8 +15,21 @@ import { MiniEventCard } from './MiniEventCard'
 import { useEventStore } from '../../store/eventStore'
 import { calculateMetrics } from '../../utils/calculations'
 import { cn } from '../../utils/cn'
+import type { SmmPost } from '../../types'
 
 const WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
+
+const PLATFORM_CHIP: Record<SmmPost['platform'], { label: string; color: string }> = {
+  telegram: { label: 'TG', color: 'bg-sky-500 text-white' },
+  vk: { label: 'ВК', color: 'bg-blue-600 text-white' },
+  instagram: { label: 'IG', color: 'bg-pink-500 text-white' },
+}
+
+function formatPostTime(scheduledAt: string): string {
+  if (!scheduledAt) return ''
+  if (scheduledAt.includes('T')) return scheduledAt.split('T')[1].slice(0, 5)
+  return scheduledAt.slice(0, 5)
+}
 
 export function MonthView() {
   const {
@@ -40,6 +53,22 @@ export function MonthView() {
 
   const getEventsForDay = (day: Date) =>
     events.filter((e) => e.date === format(day, 'yyyy-MM-dd'))
+
+  const getScheduledPostsForDay = (day: Date): SmmPost[] => {
+    const dateStr = format(day, 'yyyy-MM-dd')
+    const posts: SmmPost[] = []
+    events.forEach((e) => {
+      (e.posts ?? []).forEach((p) => {
+        if (p.status === 'scheduled' && p.scheduledAt) {
+          const postDate = p.scheduledAt.includes('T')
+            ? p.scheduledAt.split('T')[0]
+            : dateStr
+          if (postDate === dateStr) posts.push(p)
+        }
+      })
+    })
+    return posts.sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt))
+  }
 
   const getDayProfitability = (dayEvents: ReturnType<typeof getEventsForDay>) => {
     if (dayEvents.length === 0) return null
@@ -84,6 +113,7 @@ export function MonthView() {
       <div className="grid grid-cols-7">
         {days.map((day, idx) => {
           const dayEvents = getEventsForDay(day)
+          const scheduledPosts = getScheduledPostsForDay(day)
           const isToday = isSameDay(day, today)
           const isCurrentMonth = isSameMonth(day, date)
           const isWeekend = day.getDay() === 0 || day.getDay() === 6
@@ -133,6 +163,34 @@ export function MonthView() {
                   </p>
                 )}
               </div>
+
+              {/* Scheduled post indicators */}
+              {scheduledPosts.length > 0 && (
+                <div className="flex flex-wrap gap-0.5 mt-1">
+                  {scheduledPosts.slice(0, 3).map((post) => {
+                    const chip = PLATFORM_CHIP[post.platform]
+                    return (
+                      <span
+                        key={post.id}
+                        title={`${chip.label} ${formatPostTime(post.scheduledAt)}: ${post.text.slice(0, 60)}`}
+                        className={`inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9px] font-bold leading-none ${chip.color}`}
+                      >
+                        {chip.label}
+                        {post.scheduledAt && (
+                          <span className="opacity-80 font-normal">
+                            {formatPostTime(post.scheduledAt)}
+                          </span>
+                        )}
+                      </span>
+                    )
+                  })}
+                  {scheduledPosts.length > 3 && (
+                    <span className="text-[9px] text-slate-400 leading-none self-center">
+                      +{scheduledPosts.length - 3}
+                    </span>
+                  )}
+                </div>
+              )}
 
               {/* Profitability bar at the bottom of the cell */}
               {profitability && (
