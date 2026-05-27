@@ -145,7 +145,7 @@ export const useEventStore = create<EventStore>()(
       getEventsForDate: (date) => get().events.filter((e) => e.date === date),
     }),
     {
-      name: 'estate-events-v1',
+      name: 'estate-events-v2',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         events: state.events,
