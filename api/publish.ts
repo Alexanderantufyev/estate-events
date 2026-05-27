@@ -41,49 +41,6 @@ async function publishTelegram(text: string, mediaUrl?: string) {
   return tgRes
 }
 
-async function uploadPhotoToVk(imageUrl: string, token: string, groupId: string): Promise<string> {
-  // Step 1: get upload server URL
-  const serverRes = await fetch(
-    `https://api.vk.com/method/photos.getWallUploadServer?group_id=${groupId}&access_token=${token}&v=5.199`
-  )
-  const serverData = await serverRes.json() as Record<string, unknown>
-  if (serverData.error) {
-    const e = serverData.error as Record<string, unknown>
-    throw new Error(`VK getWallUploadServer: ${e.error_msg ?? JSON.stringify(e)}`)
-  }
-  const uploadUrl = (serverData.response as Record<string, unknown>).upload_url as string
-
-  // Step 2: fetch image and upload to VK
-  const imgRes = await fetch(imageUrl)
-  if (!imgRes.ok) throw new Error(`Не удалось загрузить изображение: ${imageUrl}`)
-  const imgBuffer = await imgRes.arrayBuffer()
-  const contentType = imgRes.headers.get('content-type') ?? 'image/jpeg'
-  const blob = new Blob([imgBuffer], { type: contentType })
-
-  const form = new FormData()
-  form.append('photo', blob, 'photo.jpg')
-
-  const uploadRes = await fetch(uploadUrl, { method: 'POST', body: form })
-  const uploadData = await uploadRes.json() as Record<string, unknown>
-
-  // Step 3: save photo and get attachment string
-  const saveParams = new URLSearchParams({
-    group_id: groupId,
-    photo: String(uploadData.photo),
-    server: String(uploadData.server),
-    hash: String(uploadData.hash),
-    access_token: token,
-    v: '5.199',
-  })
-  const saveRes = await fetch(`https://api.vk.com/method/photos.saveWallPhoto?${saveParams}`)
-  const saveData = await saveRes.json() as Record<string, unknown>
-  if (saveData.error) {
-    const e = saveData.error as Record<string, unknown>
-    throw new Error(`VK saveWallPhoto: ${e.error_msg ?? JSON.stringify(e)}`)
-  }
-  const photo = (saveData.response as Record<string, unknown>[])[0] as Record<string, unknown>
-  return `photo${photo.owner_id}_${photo.id}`
-}
 
 async function publishVk(text: string, mediaUrl?: string) {
   const token = process.env.VK_TOKEN
@@ -98,11 +55,7 @@ async function publishVk(text: string, mediaUrl?: string) {
     v: '5.199',
   })
 
-  const isImage = mediaUrl && /\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i.test(mediaUrl)
-  if (isImage) {
-    const attachment = await uploadPhotoToVk(mediaUrl, token, groupId)
-    params.set('attachments', attachment)
-  } else if (mediaUrl) {
+  if (mediaUrl) {
     params.set('message', `${text}\n\n${mediaUrl}`)
   }
 
