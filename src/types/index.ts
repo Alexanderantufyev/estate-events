@@ -14,6 +14,36 @@ export type CalendarView = 'month' | 'week' | 'day'
 
 export type Profitability = 'profitable' | 'loss' | 'risk'
 
+export type SmmPlatform = 'telegram' | 'vk' | 'instagram'
+export type SmmPostStatus = 'draft' | 'scheduled' | 'published'
+
+export interface SmmPost {
+  id: string
+  platform: SmmPlatform
+  text: string
+  mediaUrl: string
+  scheduledAt: string
+  status: SmmPostStatus
+}
+
+export const SMM_PLATFORM_LABELS: Record<SmmPlatform, string> = {
+  telegram: 'Telegram',
+  vk: 'ВКонтакте',
+  instagram: 'Instagram',
+}
+
+export const SMM_STATUS_LABELS: Record<SmmPostStatus, string> = {
+  draft: 'Черновик',
+  scheduled: 'Запланирован',
+  published: 'Опубликован',
+}
+
+export const SMM_STATUS_COLORS: Record<SmmPostStatus, string> = {
+  draft: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
+  scheduled: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
+  published: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400',
+}
+
 export interface TaskItem {
   id: string
   title: string
@@ -64,6 +94,7 @@ export interface EventItem {
   expenses: ExpenseData
   tasks: TaskItem[]
   timeline: TimelineItem[]
+  posts: SmmPost[]
   createdAt: string
   updatedAt: string
 }

@@ -175,6 +175,7 @@ export function convertToEventItems(parsed: ParsedICSEvent[]): Omit<EventItem, '
     expenses: { ...DEFAULT_EXPENSES },
     tasks: [],
     timeline: [],
+    posts: [],
   }))
 }
 

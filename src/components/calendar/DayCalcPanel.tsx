@@ -1,17 +1,18 @@
 import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Plus, Check, Trash2, Clock, User, Phone, ListChecks, BarChart2 } from 'lucide-react'
+import { X, Plus, Check, Trash2, Clock, User, Phone, ListChecks, BarChart2, Megaphone } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useEventStore } from '../../store/eventStore'
 import { calculateMetrics } from '../../utils/calculations'
 import { formatCurrency } from '../../utils/formatters'
-import type { RevenueData, ExpenseData, EventType, TaskItem, TimelineItem } from '../../types'
+import type { RevenueData, ExpenseData, EventType, TaskItem, TimelineItem, SmmPost } from '../../types'
 import {
   DEFAULT_REVENUE,
   DEFAULT_EXPENSES,
   EVENT_TYPE_LABELS,
   PROFITABILITY_LABELS,
 } from '../../types'
+import { SmmTab } from './SmmTab'
 
 interface DayCalcPanelProps {
   date: string | null
@@ -64,12 +65,13 @@ function TextInput({ label, value, onChange, placeholder, icon }: {
   )
 }
 
-type Tab = 'finance' | 'tasks' | 'timeline'
+type Tab = 'finance' | 'tasks' | 'timeline' | 'smm'
 
 const TABS: { key: Tab; label: string; icon: React.ReactNode }[] = [
   { key: 'finance', label: 'Финансы', icon: <BarChart2 size={13} /> },
   { key: 'tasks', label: 'Задачи', icon: <ListChecks size={13} /> },
   { key: 'timeline', label: 'Тайминг', icon: <Clock size={13} /> },
+  { key: 'smm', label: 'СММ', icon: <Megaphone size={13} /> },
 ]
 
 function newTask(): TaskItem {
@@ -92,6 +94,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
   const [expenses, setExpenses] = useState<ExpenseData>({ ...DEFAULT_EXPENSES })
   const [tasks, setTasks] = useState<TaskItem[]>([newTask()])
   const [timeline, setTimeline] = useState<TimelineItem[]>([newTimelineItem()])
+  const [posts, setPosts] = useState<SmmPost[]>([])
 
   useEffect(() => {
     setTab('finance')
@@ -101,6 +104,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
     setExpenses({ ...DEFAULT_EXPENSES })
     setTasks([newTask()])
     setTimeline([newTimelineItem()])
+    setPosts([])
   }, [date])
 
   const dayEvents = useMemo(
@@ -148,6 +152,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
       expenses,
       tasks: cleanTasks,
       timeline: cleanTimeline,
+      posts,
     })
     toast.success('Мероприятие добавлено')
     onClose()
@@ -448,6 +453,11 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                     <Plus size={13} /> Добавить шаг
                   </button>
                 </div>
+              )}
+
+              {/* SMM TAB */}
+              {tab === 'smm' && (
+                <SmmTab posts={posts} onChange={setPosts} />
               )}
 
               {/* Save button */}
