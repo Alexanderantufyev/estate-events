@@ -173,6 +173,8 @@ export function convertToEventItems(parsed: ParsedICSEvent[]): Omit<EventItem, '
     comment: p.comment,
     revenue: { ...DEFAULT_REVENUE },
     expenses: { ...DEFAULT_EXPENSES },
+    tasks: [],
+    timeline: [],
   }))
 }
 

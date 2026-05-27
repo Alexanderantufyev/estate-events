@@ -63,6 +63,8 @@ export function CreateEventModal({ isOpen, onClose, defaultDate }: CreateEventMo
       ...form,
       revenue: { ...DEFAULT_REVENUE },
       expenses: { ...DEFAULT_EXPENSES },
+      tasks: [],
+      timeline: [],
     })
     toast.success('Мероприятие создано!')
     onClose()

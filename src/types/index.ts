@@ -14,6 +14,20 @@ export type CalendarView = 'month' | 'week' | 'day'
 
 export type Profitability = 'profitable' | 'loss' | 'risk'
 
+export interface TaskItem {
+  id: string
+  title: string
+  assignee: string
+  contact: string
+  done: boolean
+}
+
+export interface TimelineItem {
+  id: string
+  time: string
+  title: string
+}
+
 export interface RevenueData {
   ticketPrice: number
   ticketsSold: number
@@ -48,6 +62,8 @@ export interface EventItem {
   comment: string
   revenue: RevenueData
   expenses: ExpenseData
+  tasks: TaskItem[]
+  timeline: TimelineItem[]
   createdAt: string
   updatedAt: string
 }
