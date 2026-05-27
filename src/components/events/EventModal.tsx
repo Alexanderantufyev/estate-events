@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   Clock,
@@ -52,13 +52,49 @@ const TYPE_OPTIONS = Object.entries(EVENT_TYPE_LABELS).map(([value, label]) => (
 }))
 
 export function EventModal({ eventId, onClose }: EventModalProps) {
-  const { getEventById, updateEvent, deleteEvent, duplicateEvent } = useEventStore()
-  const event = eventId ? getEventById(eventId) : null
+  const event = useEventStore((s) =>
+    eventId ? (s.events.find((e) => e.id === eventId) ?? null) : null
+  )
+  const updateEvent = useEventStore((s) => s.updateEvent)
+  const deleteEvent = useEventStore((s) => s.deleteEvent)
+  const duplicateEvent = useEventStore((s) => s.duplicateEvent)
 
   const [tab, setTab] = useState<ModalTab>('details')
   const [isEditing, setIsEditing] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
   const [editForm, setEditForm] = useState<Partial<EventItem>>({})
+
+  // Reset form state when switching between events
+  useEffect(() => {
+    setTab('details')
+    setIsEditing(false)
+    setEditForm({})
+  }, [eventId])
+
+  // All useCallback hooks must be declared before any conditional return
+  const handleRevenueChange = useCallback(
+    (data: RevenueData) => {
+      if (!event) return
+      updateEvent(event.id, { revenue: data })
+    },
+    [event, updateEvent]
+  )
+
+  const handleExpensesChange = useCallback(
+    (data: ExpenseData) => {
+      if (!event) return
+      updateEvent(event.id, { expenses: data })
+    },
+    [event, updateEvent]
+  )
+
+  const handlePostsChange = useCallback(
+    (posts: SmmPost[]) => {
+      if (!event) return
+      updateEvent(event.id, { posts })
+    },
+    [event, updateEvent]
+  )
 
   if (!event) return null
 
@@ -95,27 +131,6 @@ export function EventModal({ eventId, onClose }: EventModalProps) {
     duplicateEvent(event.id)
     toast.success('Мероприятие дублировано')
   }
-
-  const handleRevenueChange = useCallback(
-    (data: RevenueData) => {
-      updateEvent(event.id, { revenue: data })
-    },
-    [event.id, updateEvent]
-  )
-
-  const handleExpensesChange = useCallback(
-    (data: ExpenseData) => {
-      updateEvent(event.id, { expenses: data })
-    },
-    [event.id, updateEvent]
-  )
-
-  const handlePostsChange = useCallback(
-    (posts: SmmPost[]) => {
-      updateEvent(event.id, { posts })
-    },
-    [event.id, updateEvent]
-  )
 
   const setField = (field: keyof EventItem, value: string) => {
     setEditForm((prev) => ({ ...prev, [field]: value }))
