@@ -9,9 +9,12 @@ interface PublishRequest {
 async function publishTelegram(text: string, mediaUrl?: string) {
   const token = process.env.BOT_TOKEN
   const chatId = process.env.TG_CHANNEL_ID
-  if (!token || !chatId) throw new Error('TG credentials missing')
+  if (!token) throw new Error('BOT_TOKEN не задан в настройках сервера')
+  if (!chatId) throw new Error('TG_CHANNEL_ID не задан в настройках сервера')
 
   const base = `https://api.telegram.org/bot${token}`
+
+  let tgRes: Record<string, unknown>
 
   if (mediaUrl && /\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i.test(mediaUrl)) {
     const res = await fetch(`${base}/sendPhoto`, {
@@ -19,37 +22,47 @@ async function publishTelegram(text: string, mediaUrl?: string) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: chatId, photo: mediaUrl, caption: text }),
     })
-    return res.json()
+    tgRes = await res.json() as Record<string, unknown>
+  } else {
+    const res = await fetch(`${base}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text }),
+    })
+    tgRes = await res.json() as Record<string, unknown>
   }
 
-  const res = await fetch(`${base}/sendMessage`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: chatId, text }),
-  })
-  return res.json()
+  if (!tgRes.ok) {
+    const desc = tgRes.description as string | undefined
+    const code = tgRes.error_code as number | undefined
+    throw new Error(`Telegram API ${code ?? ''}: ${desc ?? JSON.stringify(tgRes)}`)
+  }
+
+  return tgRes
 }
 
 async function publishVk(text: string, mediaUrl?: string) {
   const token = process.env.VK_TOKEN
   const groupId = process.env.VK_GROUP_ID
-  if (!token || !groupId) throw new Error('VK credentials missing')
+  if (!token) throw new Error('VK_TOKEN не задан в настройках сервера')
+  if (!groupId) throw new Error('VK_GROUP_ID не задан в настройках сервера')
 
   const params = new URLSearchParams({
     owner_id: `-${groupId}`,
-    message: text,
+    message: mediaUrl ? `${text}\n\n${mediaUrl}` : text,
     access_token: token,
     v: '5.199',
   })
 
-  // If media is an image, attach via photos.getWallUploadServer → upload → save → post
-  // For simplicity, post text only when mediaUrl is present (VK photo upload requires multi-step)
-  if (mediaUrl) {
-    params.set('message', `${text}\n\n${mediaUrl}`)
+  const res = await fetch(`https://api.vk.com/method/wall.post?${params}`)
+  const data = await res.json() as Record<string, unknown>
+
+  if (data.error) {
+    const err = data.error as Record<string, unknown>
+    throw new Error(`VK API ${err.error_code ?? ''}: ${err.error_msg ?? JSON.stringify(err)}`)
   }
 
-  const res = await fetch(`https://api.vk.com/method/wall.post?${params}`)
-  return res.json()
+  return data
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
