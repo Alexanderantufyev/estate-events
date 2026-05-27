@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Trash2, Copy, Check, Send, Clock } from 'lucide-react'
+import { Plus, Trash2, Copy, Check, Send, Clock, Pencil } from 'lucide-react'
 import toast from 'react-hot-toast'
 import type { SmmPost, SmmPlatform, SmmPostStatus } from '../../types'
 import { SMM_PLATFORM_LABELS, SMM_STATUS_LABELS, SMM_STATUS_COLORS } from '../../types'
@@ -15,6 +15,12 @@ const PLATFORM_ICONS: Record<SmmPlatform, string> = {
   telegram: '✈',
   vk: 'ВК',
   instagram: 'IG',
+}
+
+const PLATFORM_URLS: Record<SmmPlatform, string> = {
+  telegram: 'https://web.telegram.org',
+  vk: 'https://vk.com/feed',
+  instagram: 'https://www.instagram.com',
 }
 
 const PLATFORM_COLORS: Record<SmmPlatform, string> = {
@@ -61,9 +67,11 @@ export function SmmTab({ posts, onChange }: SmmTabProps) {
     toast.success('Пост сохранён')
   }
 
-  const editPost = (post: SmmPost) => {
+  const editPost = (id: string) => {
+    const post = posts.find((p) => p.id === id)
+    if (!post) return
     setDraft({ ...post })
-    setEditingId(post.id)
+    setEditingId(id)
   }
 
   const deletePost = (id: string) => {
@@ -80,6 +88,11 @@ export function SmmTab({ posts, onChange }: SmmTabProps) {
       ? `${post.text}\n\n📎 ${post.mediaUrl}`
       : post.text
     navigator.clipboard.writeText(text).then(() => toast.success('Скопировано в буфер'))
+  }
+
+  const openPlatform = (post: SmmPost) => {
+    copyPost(post)
+    window.open(PLATFORM_URLS[post.platform], '_blank')
   }
 
   const cancelEdit = () => {
@@ -133,9 +146,16 @@ export function SmmTab({ posts, onChange }: SmmTabProps) {
                     <Copy size={12} />
                   </button>
                   <button
-                    onClick={() => editPost(post)}
-                    className="p-1.5 text-slate-400 hover:text-blue-500 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                    onClick={() => editPost(post.id)}
+                    className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                     title="Редактировать"
+                  >
+                    <Pencil size={12} />
+                  </button>
+                  <button
+                    onClick={() => openPlatform(post)}
+                    className="p-1.5 text-slate-400 hover:text-blue-500 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                    title="Скопировать и открыть платформу"
                   >
                     <Send size={12} />
                   </button>

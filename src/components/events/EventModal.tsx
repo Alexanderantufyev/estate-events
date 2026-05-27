@@ -22,13 +22,14 @@ import { Badge } from '../ui/Badge'
 import { ProfitCalculator } from '../calculator/ProfitCalculator'
 import { DeleteConfirmModal } from './DeleteConfirmModal'
 import { useEventStore } from '../../store/eventStore'
-import type { EventItem, RevenueData, ExpenseData } from '../../types'
+import type { EventItem, RevenueData, ExpenseData, SmmPost } from '../../types'
 import {
   STATUS_LABELS,
   STATUS_COLORS,
   STATUS_DOT_COLORS,
   EVENT_TYPE_LABELS,
 } from '../../types'
+import { SmmTab } from '../calendar/SmmTab'
 import { formatDate } from '../../utils/formatters'
 import { exportEventToCSV } from '../../utils/export'
 import toast from 'react-hot-toast'
@@ -38,7 +39,7 @@ interface EventModalProps {
   onClose: () => void
 }
 
-type ModalTab = 'details' | 'finances'
+type ModalTab = 'details' | 'finances' | 'smm'
 
 const STATUS_OPTIONS = Object.entries(STATUS_LABELS).map(([value, label]) => ({
   value,
@@ -105,6 +106,13 @@ export function EventModal({ eventId, onClose }: EventModalProps) {
   const handleExpensesChange = useCallback(
     (data: ExpenseData) => {
       updateEvent(event.id, { expenses: data })
+    },
+    [event.id, updateEvent]
+  )
+
+  const handlePostsChange = useCallback(
+    (posts: SmmPost[]) => {
+      updateEvent(event.id, { posts })
     },
     [event.id, updateEvent]
   )
@@ -200,6 +208,7 @@ export function EventModal({ eventId, onClose }: EventModalProps) {
             {([
               { key: 'details', label: 'Детали' },
               { key: 'finances', label: 'Финансы' },
+              { key: 'smm', label: 'СММ' },
             ] as { key: ModalTab; label: string }[]).map((t) => (
               <button
                 key={t.key}
@@ -241,6 +250,15 @@ export function EventModal({ eventId, onClose }: EventModalProps) {
                   onRevenueChange={handleRevenueChange}
                   onExpensesChange={handleExpensesChange}
                   readOnly={isEditing}
+                />
+              </motion.div>
+            )}
+
+            {tab === 'smm' && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <SmmTab
+                  posts={event.posts ?? []}
+                  onChange={handlePostsChange}
                 />
               </motion.div>
             )}
