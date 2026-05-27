@@ -53,12 +53,14 @@ function NumInput({
 }
 
 export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
-  const { getEventsForDate, addEvent, setSelectedEventId } = useEventStore()
+  const events = useEventStore((s) => s.events)
+  const addEvent = useEventStore((s) => s.addEvent)
+  const setSelectedEventId = useEventStore((s) => s.setSelectedEventId)
 
   const [title, setTitle] = useState('')
   const [type, setType] = useState<EventType>('other')
-  const [revenue, setRevenue] = useState<RevenueData>(DEFAULT_REVENUE)
-  const [expenses, setExpenses] = useState<ExpenseData>(DEFAULT_EXPENSES)
+  const [revenue, setRevenue] = useState<RevenueData>({ ...DEFAULT_REVENUE })
+  const [expenses, setExpenses] = useState<ExpenseData>({ ...DEFAULT_EXPENSES })
 
   useEffect(() => {
     setTitle('')
@@ -68,9 +70,8 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
   }, [date])
 
   const dayEvents = useMemo(
-    () => (date ? getEventsForDate(date) : []),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [date, getEventsForDate]
+    () => (date ? events.filter((e) => e.date === date) : []),
+    [date, events]
   )
 
   const metrics = useMemo(() => calculateMetrics(revenue, expenses), [revenue, expenses])
@@ -83,7 +84,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
 
   const handleSave = () => {
     if (!date) return
-    const id = addEvent({
+    addEvent({
       title: title.trim() || 'Мероприятие',
       date,
       time: '12:00',
@@ -100,7 +101,6 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
     setRevenue({ ...DEFAULT_REVENUE })
     setExpenses({ ...DEFAULT_EXPENSES })
     toast.success('Мероприятие добавлено')
-    setSelectedEventId(id)
     onClose()
   }
 
@@ -167,7 +167,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                       return (
                         <button
                           key={event.id}
-                          onClick={() => { setSelectedEventId(event.id); onClose() }}
+                          onClick={() => { onClose(); setSelectedEventId(event.id) }}
                           className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-left"
                         >
                           <div className="min-w-0">
