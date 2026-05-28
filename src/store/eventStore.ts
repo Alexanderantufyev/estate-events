@@ -2,7 +2,20 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { v4 as uuid } from '../utils/uuid'
 import type { EventItem, FilterState, CalendarView } from '../types'
-import { MOCK_EVENTS } from '../data/mockData'
+
+// Debounced sync to server — only the last mutation within 400ms triggers a write
+let syncTimer: ReturnType<typeof setTimeout> | null = null
+
+function scheduleSync(events: EventItem[]) {
+  if (syncTimer) clearTimeout(syncTimer)
+  syncTimer = setTimeout(() => {
+    fetch('/api/events', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ events }),
+    }).catch((err) => console.error('Sync failed:', err))
+  }, 400)
+}
 
 interface EventStore {
   events: EventItem[]
@@ -14,7 +27,9 @@ interface EventStore {
   isCreateModalOpen: boolean
   isAnalyticsView: boolean
   selectedCalendarDate: string | null
+  isLoading: boolean
 
+  loadEvents: () => Promise<void>
   addEvent: (event: Omit<EventItem, 'id' | 'createdAt' | 'updatedAt'>) => string
   updateEvent: (id: string, updates: Partial<EventItem>) => void
   deleteEvent: (id: string) => void
@@ -48,7 +63,7 @@ const DEFAULT_FILTERS: FilterState = {
 export const useEventStore = create<EventStore>()(
   persist(
     (set, get) => ({
-      events: MOCK_EVENTS,
+      events: [],
       filters: DEFAULT_FILTERS,
       currentView: 'month',
       currentDate: new Date().toISOString().slice(0, 10),
@@ -57,35 +72,46 @@ export const useEventStore = create<EventStore>()(
       isCreateModalOpen: false,
       isAnalyticsView: false,
       selectedCalendarDate: null,
+      isLoading: false,
+
+      loadEvents: async () => {
+        set({ isLoading: true })
+        try {
+          const res = await fetch('/api/events')
+          const data = await res.json() as { events: EventItem[] }
+          set({ events: data.events ?? [], isLoading: false })
+        } catch (err) {
+          console.error('Failed to load events:', err)
+          set({ isLoading: false })
+        }
+      },
 
       addEvent: (eventData) => {
         const id = uuid()
         const now = new Date().toISOString()
-        const event: EventItem = {
-          ...eventData,
-          id,
-          createdAt: now,
-          updatedAt: now,
-        }
-        set((state) => ({ events: [...state.events, event] }))
+        const event: EventItem = { ...eventData, id, createdAt: now, updatedAt: now }
+        const events = [...get().events, event]
+        set({ events })
+        scheduleSync(events)
         return id
       },
 
       updateEvent: (id, updates) => {
-        set((state) => ({
-          events: state.events.map((e) =>
-            e.id === id
-              ? { ...e, ...updates, updatedAt: new Date().toISOString() }
-              : e
-          ),
-        }))
+        const events = get().events.map((e) =>
+          e.id === id ? { ...e, ...updates, updatedAt: new Date().toISOString() } : e
+        )
+        set({ events })
+        scheduleSync(events)
       },
 
       deleteEvent: (id) => {
-        set((state) => ({
-          events: state.events.filter((e) => e.id !== id),
+        const state = get()
+        const events = state.events.filter((e) => e.id !== id)
+        set({
+          events,
           selectedEventId: state.selectedEventId === id ? null : state.selectedEventId,
-        }))
+        })
+        scheduleSync(events)
       },
 
       duplicateEvent: (id) => {
@@ -100,7 +126,9 @@ export const useEventStore = create<EventStore>()(
           createdAt: now,
           updatedAt: now,
         }
-        set((state) => ({ events: [...state.events, newEvent] }))
+        const events = [...get().events, newEvent]
+        set({ events })
+        scheduleSync(events)
       },
 
       setView: (view) => set({ currentView: view }),
@@ -127,15 +155,10 @@ export const useEventStore = create<EventStore>()(
             !event.organizer.toLowerCase().includes(filters.search.toLowerCase())
           )
             return false
-
-          if (filters.status !== 'all' && event.status !== filters.status)
-            return false
-
+          if (filters.status !== 'all' && event.status !== filters.status) return false
           if (filters.type !== 'all' && event.type !== filters.type) return false
-
           if (filters.dateFrom && event.date < filters.dateFrom) return false
           if (filters.dateTo && event.date > filters.dateTo) return false
-
           return true
         })
       },
@@ -145,10 +168,10 @@ export const useEventStore = create<EventStore>()(
       getEventsForDate: (date) => get().events.filter((e) => e.date === date),
     }),
     {
-      name: 'estate-events-v3',
+      name: 'estate-events-ui',
       storage: createJSONStorage(() => localStorage),
+      // Only persist UI preferences — events live on the server
       partialize: (state) => ({
-        events: state.events,
         isDarkMode: state.isDarkMode,
         currentView: state.currentView,
       }),

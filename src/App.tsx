@@ -4,11 +4,16 @@ import { Layout } from './components/layout/Layout'
 import { CalendarPage } from './components/calendar/CalendarPage'
 import { AnalyticsDashboard } from './components/analytics/AnalyticsDashboard'
 import { useEventStore } from './store/eventStore'
-import { usePostScheduler } from './hooks/usePostScheduler'
 
 export default function App() {
-  const { isDarkMode, isAnalyticsView } = useEventStore()
-  usePostScheduler()
+  const isDarkMode = useEventStore((s) => s.isDarkMode)
+  const isAnalyticsView = useEventStore((s) => s.isAnalyticsView)
+  const isLoading = useEventStore((s) => s.isLoading)
+  const loadEvents = useEventStore((s) => s.loadEvents)
+
+  useEffect(() => {
+    loadEvents()
+  }, [loadEvents])
 
   useEffect(() => {
     if (isDarkMode) {
@@ -17,6 +22,17 @@ export default function App() {
       document.documentElement.classList.remove('dark')
     }
   }, [isDarkMode])
+
+  if (isLoading) {
+    return (
+      <div className={`fixed inset-0 flex items-center justify-center ${isDarkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 rounded-full border-2 border-emerald-500 border-t-transparent animate-spin" />
+          <p className="text-sm text-slate-400">Загрузка...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -38,16 +54,10 @@ export default function App() {
             fontWeight: 500,
           },
           success: {
-            iconTheme: {
-              primary: '#22c55e',
-              secondary: '#ffffff',
-            },
+            iconTheme: { primary: '#22c55e', secondary: '#ffffff' },
           },
           error: {
-            iconTheme: {
-              primary: '#ef4444',
-              secondary: '#ffffff',
-            },
+            iconTheme: { primary: '#ef4444', secondary: '#ffffff' },
           },
         }}
       />
