@@ -455,7 +455,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                             <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">{idx + 1}</span>
                           </div>
                           <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 space-y-2">
-                            <div className="grid grid-cols-[80px_1fr] gap-2">
+                            <div className="grid grid-cols-[100px_1fr] gap-2">
                               <div>
                                 <label className="text-[10px] text-slate-400 mb-0.5 block">Время</label>
                                 <input
