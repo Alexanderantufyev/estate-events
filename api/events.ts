@@ -1,10 +1,14 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { Redis } from '@upstash/redis'
 import type { EventItem } from '../src/types'
+import { isAuthenticated } from './_auth'
 
 const KEY = 'events'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (!isAuthenticated(req)) {
+    return res.status(401).json({ error: 'Unauthorized' })
+  }
   if (req.method === 'GET') {
     try {
       const redis = Redis.fromEnv()

@@ -3,6 +3,7 @@ import { Toaster } from 'react-hot-toast'
 import { Layout } from './components/layout/Layout'
 import { CalendarPage } from './components/calendar/CalendarPage'
 import { AnalyticsDashboard } from './components/analytics/AnalyticsDashboard'
+import { AuthGate } from './components/ui/AuthGate'
 import { useEventStore } from './store/eventStore'
 
 export default function App() {
@@ -35,7 +36,7 @@ export default function App() {
   }
 
   return (
-    <>
+    <AuthGate>
       <Layout>
         {isAnalyticsView ? <AnalyticsDashboard /> : <CalendarPage />}
       </Layout>
@@ -61,6 +62,6 @@ export default function App() {
           },
         }}
       />
-    </>
+    </AuthGate>
   )
 }
