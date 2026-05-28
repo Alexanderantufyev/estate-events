@@ -12,6 +12,7 @@ import {
   X,
   Tag,
   Download,
+  Layers,
 } from 'lucide-react'
 import { Modal } from '../ui/Modal'
 import { Input } from '../ui/Input'
@@ -28,6 +29,7 @@ import {
   STATUS_COLORS,
   STATUS_DOT_COLORS,
   EVENT_TYPE_LABELS,
+  VENUE_ZONES,
 } from '../../types'
 import { SmmTab } from '../calendar/SmmTab'
 import { formatDate } from '../../utils/formatters'
@@ -132,7 +134,7 @@ export function EventModal({ eventId, onClose }: EventModalProps) {
     toast.success('Мероприятие дублировано')
   }
 
-  const setField = (field: keyof EventItem, value: string) => {
+  const setField = (field: keyof EventItem, value: string | string[]) => {
     setEditForm((prev) => ({ ...prev, [field]: value }))
   }
 
@@ -328,6 +330,25 @@ function ViewDetails({ event }: { event: EventItem }) {
         ))}
       </div>
 
+      {event.venueZones && event.venueZones.length > 0 && (
+        <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+          <Layers size={14} className="text-slate-400 shrink-0 mt-0.5" />
+          <div>
+            <p className="text-[10px] text-slate-400 dark:text-slate-500">Задействованные локации</p>
+            <div className="flex flex-wrap gap-1.5 mt-1.5">
+              {event.venueZones.map((z) => (
+                <span
+                  key={z}
+                  className="text-xs px-2 py-0.5 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg text-slate-600 dark:text-slate-300 font-medium"
+                >
+                  {z}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {event.comment && (
         <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50">
           <div className="flex items-center gap-2 mb-2">
@@ -353,7 +374,7 @@ function EditForm({
   onChange,
 }: {
   form: EventItem
-  onChange: (field: keyof EventItem, value: string) => void
+  onChange: (field: keyof EventItem, value: string | string[]) => void
 }) {
   return (
     <div className="space-y-4">
@@ -405,6 +426,32 @@ function EditForm({
           options={TYPE_OPTIONS}
           onChange={(e) => onChange('type', e.target.value)}
         />
+      </div>
+
+      <div>
+        <label className="block text-xs text-slate-500 dark:text-slate-400 mb-2">Задействованные локации</label>
+        <div className="flex flex-wrap gap-3">
+          {VENUE_ZONES.map((zone) => {
+            const checked = (form.venueZones ?? []).includes(zone)
+            return (
+              <label key={zone} className="flex items-center gap-1.5 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={(e) => {
+                    const current = form.venueZones ?? []
+                    const updated = e.target.checked
+                      ? [...current, zone]
+                      : current.filter((z) => z !== zone)
+                    onChange('venueZones', updated)
+                  }}
+                  className="w-3.5 h-3.5 rounded accent-emerald-500"
+                />
+                <span className="text-sm text-slate-700 dark:text-slate-300">{zone}</span>
+              </label>
+            )
+          })}
+        </div>
       </div>
 
       <Textarea

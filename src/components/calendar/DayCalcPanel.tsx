@@ -11,6 +11,7 @@ import {
   DEFAULT_EXPENSES,
   EVENT_TYPE_LABELS,
   PROFITABILITY_LABELS,
+  VENUE_ZONES,
 } from '../../types'
 import { SmmTab } from './SmmTab'
 
@@ -85,11 +86,13 @@ function newTimelineItem(): TimelineItem {
 export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
   const events = useEventStore((s) => s.events)
   const addEvent = useEventStore((s) => s.addEvent)
+  const deleteEvent = useEventStore((s) => s.deleteEvent)
   const setSelectedEventId = useEventStore((s) => s.setSelectedEventId)
 
   const [tab, setTab] = useState<Tab>('finance')
   const [title, setTitle] = useState('')
   const [type, setType] = useState<EventType>('other')
+  const [venueZones, setVenueZones] = useState<string[]>([])
   const [revenue, setRevenue] = useState<RevenueData>({ ...DEFAULT_REVENUE })
   const [expenses, setExpenses] = useState<ExpenseData>({ ...DEFAULT_EXPENSES })
   const [tasks, setTasks] = useState<TaskItem[]>([newTask()])
@@ -100,6 +103,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
     setTab('finance')
     setTitle('')
     setType('other')
+    setVenueZones([])
     setRevenue({ ...DEFAULT_REVENUE })
     setExpenses({ ...DEFAULT_EXPENSES })
     setTasks([newTask()])
@@ -153,6 +157,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
       tasks: cleanTasks,
       timeline: cleanTimeline,
       posts,
+      venueZones,
     })
     toast.success('Мероприятие добавлено')
     onClose()
@@ -210,19 +215,30 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                     const isProfit = m.profitability === 'profitable'
                     const isLoss = m.profitability === 'loss'
                     return (
-                      <button
+                      <div
                         key={event.id}
-                        onClick={() => { onClose(); setSelectedEventId(event.id) }}
-                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-left"
+                        className="flex items-center rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                       >
-                        <div className="min-w-0">
-                          <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{event.title}</p>
-                          <p className="text-[11px] text-slate-400 mt-0.5">{EVENT_TYPE_LABELS[event.type]} · {PROFITABILITY_LABELS[m.profitability]}</p>
-                        </div>
-                        <div className={`text-sm font-bold ml-3 flex-shrink-0 ${isProfit ? 'text-emerald-600 dark:text-emerald-400' : isLoss ? 'text-red-500 dark:text-red-400' : 'text-amber-600 dark:text-amber-400'}`}>
-                          {formatCurrency(m.netProfit)}
-                        </div>
-                      </button>
+                        <button
+                          onClick={() => { onClose(); setSelectedEventId(event.id) }}
+                          className="flex-1 flex items-center justify-between px-3 py-2 text-left min-w-0"
+                        >
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{event.title}</p>
+                            <p className="text-[11px] text-slate-400 mt-0.5">{EVENT_TYPE_LABELS[event.type]} · {PROFITABILITY_LABELS[m.profitability]}</p>
+                          </div>
+                          <div className={`text-sm font-bold ml-3 flex-shrink-0 ${isProfit ? 'text-emerald-600 dark:text-emerald-400' : isLoss ? 'text-red-500 dark:text-red-400' : 'text-amber-600 dark:text-amber-400'}`}>
+                            {formatCurrency(m.netProfit)}
+                          </div>
+                        </button>
+                        <button
+                          onClick={() => { deleteEvent(event.id); toast.success('Мероприятие удалено') }}
+                          className="p-2 mr-1.5 text-slate-300 hover:text-red-400 dark:text-slate-600 dark:hover:text-red-400 rounded-lg transition-colors flex-shrink-0"
+                          title="Удалить мероприятие"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
                     )
                   })}
                 </div>
@@ -231,7 +247,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
 
             {/* Name + type row */}
             <div className="px-5 pt-4 pb-3 border-b border-slate-100 dark:border-slate-800 flex-shrink-0">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 mb-3">
                 <TextInput label="Название" value={title} onChange={setTitle} placeholder="Название мероприятия" />
                 <div>
                   <label className="text-[10px] text-slate-400 dark:text-slate-500 mb-0.5 block">Тип</label>
@@ -244,6 +260,26 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                       <option key={k} value={k}>{v}</option>
                     ))}
                   </select>
+                </div>
+              </div>
+              <div>
+                <label className="text-[10px] text-slate-400 dark:text-slate-500 mb-1.5 block">Локации</label>
+                <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                  {VENUE_ZONES.map((zone) => (
+                    <label key={zone} className="flex items-center gap-1.5 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={venueZones.includes(zone)}
+                        onChange={(e) =>
+                          setVenueZones((prev) =>
+                            e.target.checked ? [...prev, zone] : prev.filter((z) => z !== zone)
+                          )
+                        }
+                        className="w-3.5 h-3.5 rounded accent-emerald-500"
+                      />
+                      <span className="text-xs text-slate-700 dark:text-slate-300">{zone}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
             </div>

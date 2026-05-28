@@ -17,6 +17,9 @@ export type Profitability = 'profitable' | 'loss' | 'risk'
 export type SmmPlatform = 'telegram' | 'vk' | 'instagram'
 export type SmmPostStatus = 'draft' | 'scheduled' | 'published'
 
+export const VENUE_ZONES = ['Общий зал', 'Боговая', 'Чайная', 'Задний двор'] as const
+export type VenueZone = (typeof VENUE_ZONES)[number]
+
 export interface SmmPost {
   id: string
   platform: SmmPlatform
@@ -95,6 +98,7 @@ export interface EventItem {
   tasks: TaskItem[]
   timeline: TimelineItem[]
   posts: SmmPost[]
+  venueZones?: string[]
   createdAt: string
   updatedAt: string
 }
