@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { kv } from '@vercel/kv'
+import { Redis } from '@upstash/redis'
 import type { EventItem } from '../src/types'
 
 const KEY = 'events'
@@ -7,10 +7,11 @@ const KEY = 'events'
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'GET') {
     try {
-      const events = (await kv.get<EventItem[]>(KEY)) ?? []
+      const redis = Redis.fromEnv()
+      const events = (await redis.get<EventItem[]>(KEY)) ?? []
       return res.status(200).json({ events })
     } catch (err) {
-      console.error('KV get error:', err)
+      console.error('Redis get error:', err)
       return res.status(200).json({ events: [] })
     }
   }
@@ -21,10 +22,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (!Array.isArray(events)) {
         return res.status(400).json({ error: 'events must be an array' })
       }
-      await kv.set(KEY, events)
+      const redis = Redis.fromEnv()
+      await redis.set(KEY, events)
       return res.status(200).json({ ok: true })
     } catch (err) {
-      console.error('KV set error:', err)
+      console.error('Redis set error:', err)
       return res.status(500).json({ ok: false, error: 'Failed to save' })
     }
   }

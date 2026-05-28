@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { kv } from '@vercel/kv'
+import { Redis } from '@upstash/redis'
 import type { EventItem } from '../src/types'
 import { publishTelegram, publishVk, isImageUrl } from './_helpers'
 
@@ -11,7 +11,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
-  const events = (await kv.get<EventItem[]>(KEY)) ?? []
+  const redis = Redis.fromEnv()
+  const events = (await redis.get<EventItem[]>(KEY)) ?? []
   const now = new Date()
   let published = 0
 
@@ -38,7 +39,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   if (published > 0) {
-    await kv.set(KEY, events)
+    await redis.set(KEY, events)
   }
 
   return res.status(200).json({ ok: true, published })
