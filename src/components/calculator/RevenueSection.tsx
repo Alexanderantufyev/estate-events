@@ -13,7 +13,7 @@ interface RevenueSectionProps {
 const FIELDS: { key: keyof RevenueData; label: string; hint?: string }[] = [
   { key: 'ticketPrice', label: 'Цена билета', hint: '₽/шт' },
   { key: 'ticketsSold', label: 'Продано билетов', hint: 'шт' },
-  { key: 'sponsors', label: 'Спонсоры' },
+  { key: 'sponsors', label: 'Чайная' },
   { key: 'additionalIncome', label: 'Дополнительный доход' },
   { key: 'bar', label: 'Бар / Еда' },
   { key: 'merch', label: 'Мерч' },

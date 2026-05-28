@@ -16,7 +16,7 @@ function buildRows(events: EventItem[]) {
       Статус: STATUS_LABELS[event.status],
       'Цена билета': event.revenue.ticketPrice,
       'Продано билетов': event.revenue.ticketsSold,
-      Спонсоры: event.revenue.sponsors,
+      Чайная: event.revenue.sponsors,
       'Доп. доход': event.revenue.additionalIncome,
       'Бар/Еда': event.revenue.bar,
       Мерч: event.revenue.merch,

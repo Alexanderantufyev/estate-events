@@ -347,7 +347,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                         <NumInput label="Продано билетов" value={revenue.ticketsSold} onChange={(v) => setRev('ticketsSold', v)} />
                       </div>
                       <div className="grid grid-cols-2 gap-2">
-                        <NumInput label="Спонсоры" value={revenue.sponsors} onChange={(v) => setRev('sponsors', v)} />
+                        <NumInput label="Чайная" value={revenue.sponsors} onChange={(v) => setRev('sponsors', v)} />
                         <NumInput label="Бар" value={revenue.bar} onChange={(v) => setRev('bar', v)} />
                       </div>
                       <div className="grid grid-cols-2 gap-2">
