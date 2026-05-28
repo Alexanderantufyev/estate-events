@@ -118,8 +118,16 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
 
   const metrics = useMemo(() => calculateMetrics(revenue, expenses), [revenue, expenses])
 
-  const setRev = (field: keyof RevenueData, v: string) =>
-    setRevenue((prev) => ({ ...prev, [field]: parseFloat(v) || 0 }))
+  const setRev = (field: keyof RevenueData, v: string) => {
+    setRevenue((prev) => {
+      const next = { ...prev, [field]: parseFloat(v) || 0 }
+      if (field === 'ticketPrice' || field === 'ticketsSold') {
+        const ticketRev = next.ticketPrice * next.ticketsSold
+        setExpenses((e) => ({ ...e, taxes: Math.round(ticketRev * 0.13) }))
+      }
+      return next
+    })
+  }
 
   const setExp = (field: keyof ExpenseData, v: string) =>
     setExpenses((prev) => ({ ...prev, [field]: parseFloat(v) || 0 }))

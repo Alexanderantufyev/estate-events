@@ -8,6 +8,7 @@ interface ExpenseSectionProps {
   data: ExpenseData
   onChange: (field: keyof ExpenseData, value: number) => void
   readOnly?: boolean
+  ticketRevenue?: number
 }
 
 const FIELDS: { key: keyof ExpenseData; label: string }[] = [
@@ -22,7 +23,7 @@ const FIELDS: { key: keyof ExpenseData; label: string }[] = [
   { key: 'other', label: 'Прочие расходы' },
 ]
 
-export function ExpenseSection({ data, onChange, readOnly = false }: ExpenseSectionProps) {
+export function ExpenseSection({ data, onChange, readOnly = false, ticketRevenue = 0 }: ExpenseSectionProps) {
   const total = calculateExpenses(data)
 
   const breakdown = FIELDS.map(({ key, label }) => ({
@@ -59,15 +60,24 @@ export function ExpenseSection({ data, onChange, readOnly = false }: ExpenseSect
                 </p>
               </div>
             ) : (
-              <Input
-                label={label}
-                type="number"
-                min="0"
-                value={(data[key] as number) || ''}
-                onChange={(e) => onChange(key, parseFloat(e.target.value) || 0)}
-                placeholder="0"
-                prefix="₽"
-              />
+              <div>
+                <div className="flex items-center gap-1.5 mb-0.5">
+                  <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{label}</span>
+                  {key === 'taxes' && ticketRevenue > 0 && (
+                    <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 font-medium">
+                      авто 13%
+                    </span>
+                  )}
+                </div>
+                <Input
+                  type="number"
+                  min="0"
+                  value={(data[key] as number) || ''}
+                  onChange={(e) => onChange(key, parseFloat(e.target.value) || 0)}
+                  placeholder="0"
+                  prefix="₽"
+                />
+              </div>
             )}
           </div>
         ))}

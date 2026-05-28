@@ -54,10 +54,15 @@ export function ProfitCalculator({
   const handleRevenueChange = useCallback(
     (field: keyof RevenueData, value: number) => {
       if (onRevenueChange) {
-        onRevenueChange({ ...revenue, [field]: value })
+        const newRevenue = { ...revenue, [field]: value }
+        onRevenueChange(newRevenue)
+        if ((field === 'ticketPrice' || field === 'ticketsSold') && onExpensesChange) {
+          const ticketRev = newRevenue.ticketPrice * newRevenue.ticketsSold
+          onExpensesChange({ ...expenses, taxes: Math.round(ticketRev * 0.13) })
+        }
       }
     },
-    [revenue, onRevenueChange]
+    [revenue, expenses, onRevenueChange, onExpensesChange]
   )
 
   const handleExpensesChange = useCallback(
@@ -138,6 +143,7 @@ export function ProfitCalculator({
           data={expenses}
           onChange={handleExpensesChange}
           readOnly={readOnly}
+          ticketRevenue={revenue.ticketPrice * revenue.ticketsSold}
         />
       )}
 
