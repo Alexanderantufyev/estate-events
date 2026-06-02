@@ -98,13 +98,6 @@ export function SmmTab({ posts, onChange }: SmmTabProps) {
       return
     }
 
-    // VK group token cannot upload photos — handle manually like Instagram
-    if (post.platform === 'vk' && post.mediaUrl && isImageUrl(post.mediaUrl)) {
-      copyPost(post)
-      window.open(PLATFORM_URLS['vk'], '_blank')
-      toast('ВКонтакте: текст скопирован, прикрепите фото вручную', { icon: '📋' })
-      return
-    }
     const toastId = toast.loading('Публикую...')
     try {
       const res = await fetch('/api/publish', {
