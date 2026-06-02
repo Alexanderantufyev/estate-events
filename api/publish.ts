@@ -22,10 +22,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Instagram auto-publish not supported' })
   }
 
-  if (platform === 'vk' && mediaUrl && isImageUrl(mediaUrl)) {
-    return res.status(400).json({ error: 'VK photo upload requires user token' })
-  }
-
   try {
     let result
     if (platform === 'telegram') {

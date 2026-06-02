@@ -21,7 +21,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (post.status !== 'scheduled' || !post.scheduledAt) continue
       if (new Date(post.scheduledAt) > now) continue
       if (post.platform === 'instagram') continue
-      if (post.platform === 'vk' && post.mediaUrl && isImageUrl(post.mediaUrl)) continue
 
       try {
         if (post.platform === 'telegram') {
