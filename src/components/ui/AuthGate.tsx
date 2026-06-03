@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
+import { useEventStore } from '../../store/eventStore'
 
 type Status = 'loading' | 'authenticated' | 'unauthenticated'
 
 export function AuthGate({ children }: { children: React.ReactNode }) {
   const [status, setStatus] = useState<Status>('loading')
+  const loadEvents = useEventStore((s) => s.loadEvents)
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -11,9 +13,16 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     fetch('/api/auth')
       .then((r) => r.json())
-      .then((d) => setStatus(d.ok ? 'authenticated' : 'unauthenticated'))
+      .then((d) => {
+        if (d.ok) {
+          setStatus('authenticated')
+          loadEvents()
+        } else {
+          setStatus('unauthenticated')
+        }
+      })
       .catch(() => setStatus('unauthenticated'))
-  }, [])
+  }, [loadEvents])
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,6 +37,7 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
       })
       if (res.ok) {
         setStatus('authenticated')
+        loadEvents()
       } else {
         setError('Неверный пароль')
         setPassword('')

@@ -10,11 +10,6 @@ export default function App() {
   const isDarkMode = useEventStore((s) => s.isDarkMode)
   const isAnalyticsView = useEventStore((s) => s.isAnalyticsView)
   const isLoading = useEventStore((s) => s.isLoading)
-  const loadEvents = useEventStore((s) => s.loadEvents)
-
-  useEffect(() => {
-    loadEvents()
-  }, [loadEvents])
 
   useEffect(() => {
     if (isDarkMode) {
