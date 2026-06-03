@@ -13,10 +13,22 @@ export function CalendarPage() {
     selectedEventId,
     isCreateModalOpen,
     selectedCalendarDate,
+    isLoading,
     setSelectedEventId,
     setIsCreateModalOpen,
     setSelectedCalendarDate,
   } = useEventStore()
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 rounded-full border-2 border-emerald-500 border-t-transparent animate-spin" />
+          <p className="text-sm text-slate-400">Загрузка...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-4">

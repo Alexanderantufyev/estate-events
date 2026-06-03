@@ -9,7 +9,6 @@ import { useEventStore } from './store/eventStore'
 export default function App() {
   const isDarkMode = useEventStore((s) => s.isDarkMode)
   const isAnalyticsView = useEventStore((s) => s.isAnalyticsView)
-  const isLoading = useEventStore((s) => s.isLoading)
 
   useEffect(() => {
     if (isDarkMode) {
@@ -18,17 +17,6 @@ export default function App() {
       document.documentElement.classList.remove('dark')
     }
   }, [isDarkMode])
-
-  if (isLoading) {
-    return (
-      <div className={`fixed inset-0 flex items-center justify-center ${isDarkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 rounded-full border-2 border-emerald-500 border-t-transparent animate-spin" />
-          <p className="text-sm text-slate-400">Загрузка...</p>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <AuthGate>
