@@ -78,7 +78,8 @@ export const useEventStore = create<EventStore>()(
         set({ isLoading: true })
         try {
           const res = await fetch('/api/events')
-          const data = await res.json() as { events: EventItem[] }
+          const data = await res.json() as { events?: EventItem[]; error?: string }
+          if (data.error) console.error('API error:', data.error)
           set({ events: data.events ?? [], isLoading: false })
         } catch (err) {
           console.error('Failed to load events:', err)
