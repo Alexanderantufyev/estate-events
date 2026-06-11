@@ -3,18 +3,51 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import { v4 as uuid } from '../utils/uuid'
 import type { EventItem, FilterState, CalendarView } from '../types'
 
-// Debounced sync to server — only the last mutation within 400ms triggers a write
+// Direct Upstash Redis REST API — no serverless functions needed
+const REST_URL = import.meta.env.VITE_UPSTASH_REST_URL as string | undefined
+const REST_TOKEN = import.meta.env.VITE_UPSTASH_REST_TOKEN as string | undefined
+
+async function redisGet(): Promise<EventItem[]> {
+  if (!REST_URL || !REST_TOKEN) return []
+  try {
+    const res = await fetch(REST_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${REST_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(['GET', 'events']),
+    })
+    const data = await res.json() as { result: string | null }
+    if (!data.result) return []
+    return JSON.parse(data.result) as EventItem[]
+  } catch (err) {
+    console.error('Redis GET failed:', err)
+    return []
+  }
+}
+
+async function redisSet(events: EventItem[]): Promise<void> {
+  if (!REST_URL || !REST_TOKEN) return
+  try {
+    await fetch(REST_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${REST_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(['SET', 'events', JSON.stringify(events)]),
+    })
+  } catch (err) {
+    console.error('Redis SET failed:', err)
+  }
+}
+
 let syncTimer: ReturnType<typeof setTimeout> | null = null
 
 function scheduleSync(events: EventItem[]) {
   if (syncTimer) clearTimeout(syncTimer)
-  syncTimer = setTimeout(() => {
-    fetch('/api/events', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ events }),
-    }).catch((err) => console.error('Sync failed:', err))
-  }, 400)
+  syncTimer = setTimeout(() => redisSet(events), 600)
 }
 
 interface EventStore {
@@ -44,7 +77,6 @@ interface EventStore {
 
   setFilters: (filters: Partial<FilterState>) => void
   clearFilters: () => void
-
   toggleDarkMode: () => void
 
   getFilteredEvents: () => EventItem[]
@@ -76,15 +108,8 @@ export const useEventStore = create<EventStore>()(
 
       loadEvents: async () => {
         set({ isLoading: true })
-        try {
-          const res = await fetch('/api/events')
-          const data = await res.json() as { events?: EventItem[]; error?: string }
-          if (data.error) console.error('API error:', data.error)
-          set({ events: data.events ?? [], isLoading: false })
-        } catch (err) {
-          console.error('Failed to load events:', err)
-          set({ isLoading: false })
-        }
+        const events = await redisGet()
+        set({ events, isLoading: false })
       },
 
       addEvent: (eventData) => {
@@ -141,9 +166,7 @@ export const useEventStore = create<EventStore>()(
 
       setFilters: (filters) =>
         set((state) => ({ filters: { ...state.filters, ...filters } })),
-
       clearFilters: () => set({ filters: DEFAULT_FILTERS }),
-
       toggleDarkMode: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
 
       getFilteredEvents: () => {
@@ -165,13 +188,11 @@ export const useEventStore = create<EventStore>()(
       },
 
       getEventById: (id) => get().events.find((e) => e.id === id),
-
       getEventsForDate: (date) => get().events.filter((e) => e.date === date),
     }),
     {
       name: 'estate-events-ui',
       storage: createJSONStorage(() => localStorage),
-      // Only persist UI preferences — events live on the server
       partialize: (state) => ({
         isDarkMode: state.isDarkMode,
         currentView: state.currentView,

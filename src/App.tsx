@@ -3,12 +3,16 @@ import { Toaster } from 'react-hot-toast'
 import { Layout } from './components/layout/Layout'
 import { CalendarPage } from './components/calendar/CalendarPage'
 import { AnalyticsDashboard } from './components/analytics/AnalyticsDashboard'
-import { AuthGate } from './components/ui/AuthGate'
 import { useEventStore } from './store/eventStore'
 
 export default function App() {
   const isDarkMode = useEventStore((s) => s.isDarkMode)
   const isAnalyticsView = useEventStore((s) => s.isAnalyticsView)
+  const loadEvents = useEventStore((s) => s.loadEvents)
+
+  useEffect(() => {
+    loadEvents()
+  }, [loadEvents])
 
   useEffect(() => {
     if (isDarkMode) {
@@ -19,7 +23,7 @@ export default function App() {
   }, [isDarkMode])
 
   return (
-    <AuthGate>
+    <>
       <Layout>
         {isAnalyticsView ? <AnalyticsDashboard /> : <CalendarPage />}
       </Layout>
@@ -37,14 +41,10 @@ export default function App() {
             fontSize: '13px',
             fontWeight: 500,
           },
-          success: {
-            iconTheme: { primary: '#22c55e', secondary: '#ffffff' },
-          },
-          error: {
-            iconTheme: { primary: '#ef4444', secondary: '#ffffff' },
-          },
+          success: { iconTheme: { primary: '#1B6255', secondary: '#ffffff' } },
+          error: { iconTheme: { primary: '#B5171E', secondary: '#ffffff' } },
         }}
       />
-    </AuthGate>
+    </>
   )
 }
