@@ -196,14 +196,12 @@ export function Header() {
             <span className="hidden lg:inline text-xs font-medium">Google Календарь</span>
           </button>
 
-          <div className="hidden lg:block">
-            <button
-              onClick={toggleDarkMode}
-              className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors"
-            >
-              {isDarkMode ? <Sun size={15} /> : <Moon size={15} />}
-            </button>
-          </div>
+          <button
+            onClick={toggleDarkMode}
+            className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors"
+          >
+            {isDarkMode ? <Sun size={15} /> : <Moon size={15} />}
+          </button>
 
           <Button
             onClick={() => {
