@@ -7,7 +7,6 @@ import { EventModal } from '../events/EventModal'
 import { CreateEventModal } from '../events/EventForm'
 import { useEventStore } from '../../store/eventStore'
 
-const REST_URL = import.meta.env.VITE_UPSTASH_REST_URL as string | undefined
 
 export function CalendarPage() {
   const {
@@ -34,11 +33,6 @@ export function CalendarPage() {
 
   return (
     <div className="space-y-4">
-      {!REST_URL && (
-        <div className="mx-4 p-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-xs text-red-600 dark:text-red-400">
-          ⚠️ Redis не настроен: переменная VITE_UPSTASH_REST_URL отсутствует в сборке. События не загрузятся.
-        </div>
-      )}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentView}
