@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import toast from 'react-hot-toast'
 import { v4 as uuid } from '../utils/uuid'
 import type { EventItem, FilterState, CalendarView } from '../types'
 
@@ -18,11 +19,15 @@ async function redisGet(): Promise<EventItem[]> {
       },
       body: JSON.stringify(['GET', 'events']),
     })
+    if (!res.ok) {
+      toast.error(`Redis GET ошибка ${res.status}: ${await res.text()}`)
+      return []
+    }
     const data = await res.json() as { result: string | null }
     if (!data.result) return []
     return JSON.parse(data.result) as EventItem[]
   } catch (err) {
-    console.error('Redis GET failed:', err)
+    toast.error(`Redis GET: ${String(err)}`)
     return []
   }
 }
@@ -30,7 +35,7 @@ async function redisGet(): Promise<EventItem[]> {
 async function redisSet(events: EventItem[]): Promise<void> {
   if (!REST_URL || !REST_TOKEN) return
   try {
-    await fetch(REST_URL, {
+    const res = await fetch(REST_URL, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${REST_TOKEN}`,
@@ -38,8 +43,11 @@ async function redisSet(events: EventItem[]): Promise<void> {
       },
       body: JSON.stringify(['SET', 'events', JSON.stringify(events)]),
     })
+    if (!res.ok) {
+      toast.error(`Redis SET ошибка ${res.status}: ${await res.text()}`)
+    }
   } catch (err) {
-    console.error('Redis SET failed:', err)
+    toast.error(`Redis SET: ${String(err)}`)
   }
 }
 
