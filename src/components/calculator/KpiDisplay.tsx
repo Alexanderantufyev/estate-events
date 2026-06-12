@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import {
   TrendingUp,
   TrendingDown,
@@ -28,9 +28,9 @@ export function KpiDisplay({ metrics }: KpiDisplayProps) {
       label: 'Чистая прибыль',
       value: formatCurrency(metrics.netProfit),
       icon: isProfit ? TrendingUp : TrendingDown,
-      color: isProfit ? 'text-emerald-500' : 'text-red-500',
-      bg: isProfit ? 'bg-emerald-50 dark:bg-emerald-500/10' : 'bg-red-50 dark:bg-red-500/10',
-      iconColor: isProfit ? 'text-emerald-500' : 'text-red-500',
+      color: isProfit ? 'text-pomor-500' : 'text-red-500',
+      bg: isProfit ? 'bg-pomor-50 dark:bg-pomor-500/10' : 'bg-red-50 dark:bg-red-500/10',
+      iconColor: isProfit ? 'text-pomor-500' : 'text-red-500',
     },
     {
       label: 'ROI',

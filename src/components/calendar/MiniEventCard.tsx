@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import type { EventItem } from '../../types'
 import { STATUS_CHIP_COLORS } from '../../types'
 import { calculateMetrics } from '../../utils/calculations'
@@ -19,7 +19,7 @@ export function MiniEventCard({ event, compact = false }: MiniEventCardProps) {
 
   const profitDot = hasFinancialData
     ? metrics.profitability === 'profitable'
-      ? 'bg-emerald-400'
+      ? 'bg-pomor-400'
       : metrics.profitability === 'loss'
       ? 'bg-red-400'
       : 'bg-amber-400'

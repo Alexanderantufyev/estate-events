@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Plus, Trash2, Copy, Check, Send, Clock, Pencil } from 'lucide-react'
 import toast from 'react-hot-toast'
 import type { SmmPost, SmmPlatform, SmmPostStatus } from '../../types'
@@ -280,7 +280,7 @@ export function SmmTab({ posts, onChange }: SmmTabProps) {
               type="datetime-local"
               value={draft.scheduledAt}
               onChange={(e) => setDraft((d) => d ? { ...d, scheduledAt: e.target.value } : d)}
-              className="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-all"
+              className="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-pomor-500/40 transition-all"
             />
           </div>
 
@@ -292,7 +292,7 @@ export function SmmTab({ posts, onChange }: SmmTabProps) {
               onChange={(e) => setDraft((d) => d ? { ...d, text: e.target.value } : d)}
               placeholder="Напишите текст публикации..."
               rows={5}
-              className="w-full px-2.5 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 placeholder-slate-300 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 resize-none transition-all leading-relaxed"
+              className="w-full px-2.5 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 placeholder-slate-300 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-pomor-500/40 resize-none transition-all leading-relaxed"
             />
             <p className="text-[10px] text-slate-400 text-right mt-0.5">{draft.text.length} симв.</p>
           </div>
@@ -305,7 +305,7 @@ export function SmmTab({ posts, onChange }: SmmTabProps) {
               value={draft.mediaUrl}
               onChange={(e) => setDraft((d) => d ? { ...d, mediaUrl: e.target.value } : d)}
               placeholder="https://..."
-              className="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 placeholder-slate-300 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-all"
+              className="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 placeholder-slate-300 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-pomor-500/40 transition-all"
             />
             {draft.mediaUrl && isImageUrl(draft.mediaUrl) && (
               <img
@@ -327,7 +327,7 @@ export function SmmTab({ posts, onChange }: SmmTabProps) {
             </button>
             <button
               onClick={savePost}
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-semibold text-white bg-emerald-500 hover:bg-emerald-600 rounded-lg transition-colors"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-semibold text-white bg-pomor-500 hover:bg-pomor-600 rounded-lg transition-colors"
             >
               <Check size={13} /> Сохранить
             </button>
@@ -339,7 +339,7 @@ export function SmmTab({ posts, onChange }: SmmTabProps) {
       {!editingId && (
         <button
           onClick={startNew}
-          className="w-full flex items-center justify-center gap-2 py-2.5 border border-dashed border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 hover:text-emerald-500 dark:hover:text-emerald-400 hover:border-emerald-400 text-xs font-medium rounded-xl transition-colors"
+          className="w-full flex items-center justify-center gap-2 py-2.5 border border-dashed border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 hover:text-pomor-500 dark:hover:text-pomor-400 hover:border-pomor-400 text-xs font-medium rounded-xl transition-colors"
         >
           <Plus size={13} /> Добавить пост
         </button>

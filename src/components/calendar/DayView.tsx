@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { format, parseISO } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { Clock, MapPin, User, TrendingUp, TrendingDown } from 'lucide-react'
@@ -40,7 +40,7 @@ export function DayView() {
           className={cn(
             'w-14 h-14 rounded-2xl flex items-center justify-center text-2xl font-bold',
             isToday
-              ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30'
+              ? 'bg-pomor-500 text-white shadow-lg shadow-pomor-500/30'
               : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200'
           )}
         >
@@ -186,7 +186,7 @@ function DayEventCard({
           className={cn(
             'w-1 self-stretch rounded-full',
             event.status === 'planned' && 'bg-blue-500',
-            event.status === 'confirmed' && 'bg-emerald-500',
+            event.status === 'confirmed' && 'bg-pomor-500',
             event.status === 'completed' && 'bg-purple-500',
             event.status === 'cancelled' && 'bg-red-500'
           )}
@@ -220,7 +220,7 @@ function DayEventCard({
           {hasData && (
             <div className="flex items-center gap-4 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-1.5">
-                <TrendingUp size={12} className="text-emerald-500" />
+                <TrendingUp size={12} className="text-pomor-500" />
                 <span className="text-xs text-slate-600 dark:text-slate-400">
                   {formatCurrency(metrics.totalRevenue)}
                 </span>
@@ -234,7 +234,7 @@ function DayEventCard({
               <div
                 className={cn(
                   'text-xs font-semibold',
-                  metrics.netProfit >= 0 ? 'text-emerald-500' : 'text-red-500'
+                  metrics.netProfit >= 0 ? 'text-pomor-500' : 'text-red-500'
                 )}
               >
                 {metrics.netProfit >= 0 ? '+' : ''}

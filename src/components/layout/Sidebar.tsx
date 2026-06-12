@@ -1,4 +1,4 @@
-import { CalendarDays, BarChart3, Moon, Sun, Building2 } from 'lucide-react'
+﻿import { CalendarDays, BarChart3, Moon, Sun, Building2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { cn } from '../../utils/cn'
 import { useEventStore } from '../../store/eventStore'
@@ -10,7 +10,7 @@ export function Sidebar() {
   return (
     <aside className="hidden lg:flex flex-col w-60 shrink-0 h-screen sticky top-0 glass border-r border-slate-200/60 dark:border-slate-700/60">
       <div className="flex items-center gap-3 px-5 py-5 border-b border-slate-100 dark:border-slate-800">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-pomor-400 to-pomor-600 flex items-center justify-center shadow-lg shadow-pomor-500/30">
           <Building2 size={18} className="text-white" />
         </div>
         <div>
@@ -85,7 +85,7 @@ function NavItem({
       {active && (
         <motion.span
           layoutId="sidebar-active"
-          className="absolute inset-0 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl"
+          className="absolute inset-0 bg-pomor-50 dark:bg-pomor-500/10 rounded-xl"
           transition={{ type: 'spring', bounce: 0.2, duration: 0.4 }}
         />
       )}

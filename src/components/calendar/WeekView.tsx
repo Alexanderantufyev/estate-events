@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import {
   startOfWeek,
   addDays,
@@ -44,7 +44,7 @@ export function WeekView() {
             key={i}
             className={cn(
               'py-3 text-center border-r border-slate-100 dark:border-slate-800 last:border-r-0',
-              isSameDay(day, today) && 'bg-emerald-50/50 dark:bg-emerald-500/5'
+              isSameDay(day, today) && 'bg-pomor-50/50 dark:bg-pomor-500/5'
             )}
           >
             <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase">
@@ -54,7 +54,7 @@ export function WeekView() {
               className={cn(
                 'text-lg font-bold mt-0.5 w-9 h-9 mx-auto flex items-center justify-center rounded-full transition-colors',
                 isSameDay(day, today)
-                  ? 'bg-emerald-500 text-white'
+                  ? 'bg-pomor-500 text-white'
                   : 'text-slate-700 dark:text-slate-200'
               )}
             >
@@ -87,7 +87,7 @@ export function WeekView() {
                 key={di}
                 className={cn(
                   'border-r border-slate-100 dark:border-slate-800 last:border-r-0 relative',
-                  isSameDay(day, today) && 'bg-emerald-50/20 dark:bg-emerald-500/5'
+                  isSameDay(day, today) && 'bg-pomor-50/20 dark:bg-pomor-500/5'
                 )}
                 onClick={() => {
                   setCurrentDate(format(day, 'yyyy-MM-dd'))

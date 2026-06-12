@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import {
   TrendingUp,
   TrendingDown,
@@ -42,8 +42,8 @@ export function GlobalKpi() {
       label: 'Общий доход',
       value: formatCurrency(totalRevenue),
       icon: TrendingUp,
-      color: 'text-emerald-500',
-      bg: 'bg-emerald-50 dark:bg-emerald-500/10',
+      color: 'text-pomor-500',
+      bg: 'bg-pomor-50 dark:bg-pomor-500/10',
       trend: null,
     },
     {
@@ -84,8 +84,8 @@ export function GlobalKpi() {
       value: `${profitable} / ${events.length}`,
       sub: `${loss} убыточных · ${risk} в зоне риска`,
       icon: profitable > loss ? CheckCircle : XCircle,
-      color: profitable > loss ? 'text-emerald-500' : 'text-red-500',
-      bg: profitable > loss ? 'bg-emerald-50 dark:bg-emerald-500/10' : 'bg-red-50 dark:bg-red-500/10',
+      color: profitable > loss ? 'text-pomor-500' : 'text-red-500',
+      bg: profitable > loss ? 'bg-pomor-50 dark:bg-pomor-500/10' : 'bg-red-50 dark:bg-red-500/10',
       trend: null,
     },
   ]

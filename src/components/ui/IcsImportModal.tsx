@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+﻿import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Upload, Calendar, MapPin, Clock, CheckCircle, AlertCircle, X } from 'lucide-react'
 import { Modal } from './Modal'
@@ -130,8 +130,8 @@ export function IcsImportModal({ isOpen, onClose }: IcsImportModalProps) {
               onClick={() => fileRef.current?.click()}
               className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all ${
                 isDragging
-                  ? 'border-emerald-400 bg-emerald-50 dark:bg-emerald-500/10'
-                  : 'border-slate-200 dark:border-slate-700 hover:border-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'
+                  ? 'border-pomor-400 bg-pomor-50 dark:bg-pomor-500/10'
+                  : 'border-slate-200 dark:border-slate-700 hover:border-pomor-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'
               }`}
             >
               <Upload size={32} className="mx-auto mb-3 text-slate-300 dark:text-slate-600" />
@@ -167,7 +167,7 @@ export function IcsImportModal({ isOpen, onClose }: IcsImportModalProps) {
               </p>
               <button
                 onClick={toggleAll}
-                className="text-xs text-emerald-600 dark:text-emerald-400 hover:underline font-medium"
+                className="text-xs text-pomor-600 dark:text-pomor-400 hover:underline font-medium"
               >
                 {selected.size === parsedEvents.length ? 'Снять все' : 'Выбрать все'}
               </button>
@@ -183,13 +183,13 @@ export function IcsImportModal({ isOpen, onClose }: IcsImportModalProps) {
                   onClick={() => toggleSelect(i)}
                   className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
                     selected.has(i)
-                      ? 'border-emerald-300 dark:border-emerald-500/40 bg-emerald-50/50 dark:bg-emerald-500/5'
+                      ? 'border-pomor-300 dark:border-pomor-500/40 bg-pomor-50/50 dark:bg-pomor-500/5'
                       : 'border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 opacity-50'
                   }`}
                 >
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                     selected.has(i)
-                      ? 'border-emerald-500 bg-emerald-500'
+                      ? 'border-pomor-500 bg-pomor-500'
                       : 'border-slate-300 dark:border-slate-600'
                   }`}>
                     {selected.has(i) && <CheckCircle size={12} className="text-white" />}
@@ -247,8 +247,8 @@ export function IcsImportModal({ isOpen, onClose }: IcsImportModalProps) {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center py-8 space-y-4"
           >
-            <div className="w-16 h-16 rounded-2xl bg-emerald-100 dark:bg-emerald-500/15 flex items-center justify-center mx-auto">
-              <CheckCircle size={32} className="text-emerald-500" />
+            <div className="w-16 h-16 rounded-2xl bg-pomor-100 dark:bg-pomor-500/15 flex items-center justify-center mx-auto">
+              <CheckCircle size={32} className="text-pomor-500" />
             </div>
             <div>
               <p className="text-lg font-semibold text-slate-800 dark:text-slate-100">

@@ -1,4 +1,4 @@
-import {
+﻿import {
   Plus,
   Search,
   ChevronLeft,
@@ -102,7 +102,7 @@ export function Header() {
     <header className="sticky top-0 z-30 glass border-b border-slate-200/60 dark:border-slate-700/60">
       <div className="flex items-center gap-3 px-4 lg:px-6 h-16">
         <div className="flex lg:hidden items-center gap-2 mr-1">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-pomor-400 to-pomor-600 flex items-center justify-center">
             <span className="text-white text-xs font-bold">У</span>
           </div>
         </div>
@@ -117,7 +117,7 @@ export function Header() {
             </button>
             <button
               onClick={goToday}
-              className="text-sm font-semibold text-slate-800 dark:text-slate-100 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors min-w-[140px] text-center"
+              className="text-sm font-semibold text-slate-800 dark:text-slate-100 hover:text-pomor-600 dark:hover:text-pomor-400 transition-colors min-w-[140px] text-center"
             >
               {formatMonthYear(date)}
             </button>
@@ -148,7 +148,7 @@ export function Header() {
             placeholder="Поиск мероприятий..."
             value={filters.search}
             onChange={(e) => setFilters({ search: e.target.value })}
-            className="pl-9 pr-4 py-2 text-sm rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 w-52 transition-all focus:w-64"
+            className="pl-9 pr-4 py-2 text-sm rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pomor-500/50 w-52 transition-all focus:w-64"
           />
         </div>
 
@@ -239,7 +239,7 @@ export function Header() {
             value="confirmed"
             current={filters.status}
             onClick={() => setFilters({ status: 'confirmed' })}
-            color="bg-emerald-500"
+            color="bg-pomor-500"
           />
           <FilterChip
             label="Завершено"

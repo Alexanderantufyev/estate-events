@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+﻿import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import {
   startOfMonth,
@@ -140,7 +140,7 @@ export function MonthView() {
                   className={cn(
                     'text-sm font-medium w-7 h-7 flex items-center justify-center rounded-full transition-colors',
                     isToday
-                      ? 'bg-emerald-500 text-white font-bold'
+                      ? 'bg-pomor-500 text-white font-bold'
                       : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
                   )}
                 >
@@ -197,7 +197,7 @@ export function MonthView() {
                 <div
                   className={cn(
                     'absolute bottom-0 left-0 right-0 h-[3px] rounded-b',
-                    profitability === 'profitable' && 'bg-emerald-400/70',
+                    profitability === 'profitable' && 'bg-pomor-400/70',
                     profitability === 'loss' && 'bg-red-400/70',
                     profitability === 'risk' && 'bg-amber-400/70'
                   )}

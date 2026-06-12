@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+﻿import { useState, useCallback, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   Clock,
@@ -150,7 +150,7 @@ export function EventModal({ eventId, onClose }: EventModalProps) {
           <div className="flex items-start gap-3 px-6 py-4 border-b border-slate-100 dark:border-slate-800">
             {isEditing ? (
               <input
-                className="flex-1 text-base font-semibold bg-transparent border-b-2 border-emerald-500 text-slate-900 dark:text-slate-100 focus:outline-none pb-0.5"
+                className="flex-1 text-base font-semibold bg-transparent border-b-2 border-pomor-500 text-slate-900 dark:text-slate-100 focus:outline-none pb-0.5"
                 value={editForm.title || ''}
                 onChange={(e) => setField('title', e.target.value)}
                 autoFocus
@@ -445,7 +445,7 @@ function EditForm({
                       : current.filter((z) => z !== zone)
                     onChange('venueZones', updated)
                   }}
-                  className="w-3.5 h-3.5 rounded accent-emerald-500"
+                  className="w-3.5 h-3.5 rounded accent-pomor-500"
                 />
                 <span className="text-sm text-slate-700 dark:text-slate-300">{zone}</span>
               </label>

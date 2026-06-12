@@ -1,4 +1,4 @@
-export type EventStatus = 'planned' | 'confirmed' | 'completed' | 'cancelled'
+﻿export type EventStatus = 'planned' | 'confirmed' | 'completed' | 'cancelled'
 
 export type EventType =
   | 'concert'
@@ -44,7 +44,7 @@ export const SMM_STATUS_LABELS: Record<SmmPostStatus, string> = {
 export const SMM_STATUS_COLORS: Record<SmmPostStatus, string> = {
   draft: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
   scheduled: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
-  published: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400',
+  published: 'bg-pomor-100 text-pomor-600 dark:bg-pomor-900/30 dark:text-pomor-400',
 }
 
 export interface TaskItem {
@@ -131,21 +131,21 @@ export const STATUS_LABELS: Record<EventStatus, string> = {
 
 export const STATUS_COLORS: Record<EventStatus, string> = {
   planned: 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400',
-  confirmed: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400',
+  confirmed: 'bg-pomor-100 text-pomor-700 dark:bg-pomor-500/15 dark:text-pomor-400',
   completed: 'bg-purple-100 text-purple-700 dark:bg-purple-500/15 dark:text-purple-400',
   cancelled: 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400',
 }
 
 export const STATUS_DOT_COLORS: Record<EventStatus, string> = {
   planned: 'bg-blue-500',
-  confirmed: 'bg-emerald-500',
+  confirmed: 'bg-pomor-500',
   completed: 'bg-purple-500',
   cancelled: 'bg-red-500',
 }
 
 export const STATUS_CHIP_COLORS: Record<EventStatus, string> = {
   planned: 'bg-blue-500/90 text-white',
-  confirmed: 'bg-emerald-500/90 text-white',
+  confirmed: 'bg-pomor-500/90 text-white',
   completed: 'bg-purple-500/90 text-white',
   cancelled: 'bg-red-500/90 text-white',
 }
@@ -162,13 +162,13 @@ export const EVENT_TYPE_LABELS: Record<EventType, string> = {
 }
 
 export const PROFITABILITY_COLORS: Record<Profitability, string> = {
-  profitable: 'text-emerald-500',
+  profitable: 'text-pomor-500',
   loss: 'text-red-500',
   risk: 'text-amber-500',
 }
 
 export const PROFITABILITY_BG: Record<Profitability, string> = {
-  profitable: 'bg-emerald-500/10 border-emerald-500/20',
+  profitable: 'bg-pomor-500/10 border-pomor-500/20',
   loss: 'bg-red-500/10 border-red-500/20',
   risk: 'bg-amber-500/10 border-amber-500/20',
 }

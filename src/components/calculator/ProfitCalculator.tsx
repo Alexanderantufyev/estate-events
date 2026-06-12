@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+﻿import { useState, useCallback } from 'react'
 import {
   BarChart,
   Bar,
@@ -101,7 +101,7 @@ export function ProfitCalculator({
       return (
         <div className="glass-card px-3 py-2 text-xs shadow-xl">
           <p className="font-semibold text-slate-700 dark:text-slate-200 mb-1">{label || payload[0].name}</p>
-          <p className="text-emerald-600 dark:text-emerald-400 font-bold">
+          <p className="text-pomor-600 dark:text-pomor-400 font-bold">
             {formatCurrency(payload[0].value)}
           </p>
         </div>

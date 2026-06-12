@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+﻿import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Plus, Check, Trash2, Clock, User, Phone, ListChecks, BarChart2, Megaphone } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -40,7 +40,7 @@ function NumInput({ label, value, onChange }: { label: string; value: number; on
         onChange={(e) => onChange(e.target.value)}
         placeholder="0"
         min="0"
-        className="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-400 transition-all"
+        className="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-pomor-500/40 focus:border-pomor-400 transition-all"
       />
     </div>
   )
@@ -59,7 +59,7 @@ function TextInput({ label, value, onChange, placeholder, icon }: {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className={`w-full py-1.5 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 placeholder-slate-300 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-400 transition-all ${icon ? 'pl-8 pr-2.5' : 'px-2.5'}`}
+          className={`w-full py-1.5 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 placeholder-slate-300 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-pomor-500/40 focus:border-pomor-400 transition-all ${icon ? 'pl-8 pr-2.5' : 'px-2.5'}`}
         />
       </div>
     </div>
@@ -175,7 +175,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
 
   const profitColor =
     metrics.profitability === 'profitable'
-      ? { text: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800/40' }
+      ? { text: 'text-pomor-600 dark:text-pomor-400', bg: 'bg-pomor-50 dark:bg-pomor-900/20 border-pomor-200 dark:border-pomor-800/40' }
       : metrics.profitability === 'loss'
       ? { text: 'text-red-500 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800/40' }
       : { text: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800/40' }
@@ -235,7 +235,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                             <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{event.title}</p>
                             <p className="text-[11px] text-slate-400 mt-0.5">{EVENT_TYPE_LABELS[event.type]} · {PROFITABILITY_LABELS[m.profitability]}</p>
                           </div>
-                          <div className={`text-sm font-bold ml-3 flex-shrink-0 ${isProfit ? 'text-emerald-600 dark:text-emerald-400' : isLoss ? 'text-red-500 dark:text-red-400' : 'text-amber-600 dark:text-amber-400'}`}>
+                          <div className={`text-sm font-bold ml-3 flex-shrink-0 ${isProfit ? 'text-pomor-600 dark:text-pomor-400' : isLoss ? 'text-red-500 dark:text-red-400' : 'text-amber-600 dark:text-amber-400'}`}>
                             {formatCurrency(m.netProfit)}
                           </div>
                         </button>
@@ -262,7 +262,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                   <select
                     value={type}
                     onChange={(e) => setType(e.target.value as EventType)}
-                    className="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-400 transition-all"
+                    className="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-pomor-500/40 focus:border-pomor-400 transition-all"
                   >
                     {Object.entries(EVENT_TYPE_LABELS).map(([k, v]) => (
                       <option key={k} value={k}>{v}</option>
@@ -283,7 +283,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                             e.target.checked ? [...prev, zone] : prev.filter((z) => z !== zone)
                           )
                         }
-                        className="w-3.5 h-3.5 rounded accent-emerald-500"
+                        className="w-3.5 h-3.5 rounded accent-pomor-500"
                       />
                       <span className="text-xs text-slate-700 dark:text-slate-300">{zone}</span>
                     </label>
@@ -348,7 +348,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                   </div>
 
                   <div>
-                    <p className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-500 uppercase tracking-wider mb-2">Доходы</p>
+                    <p className="text-[10px] font-semibold text-pomor-600 dark:text-pomor-500 uppercase tracking-wider mb-2">Доходы</p>
                     <div className="space-y-2">
                       <div className="grid grid-cols-2 gap-2">
                         <NumInput label="Цена билета, ₽" value={revenue.ticketPrice} onChange={(v) => setRev('ticketPrice', v)} />
@@ -363,7 +363,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                         <NumInput label="Прочие доходы" value={revenue.additionalIncome} onChange={(v) => setRev('additionalIncome', v)} />
                       </div>
                       {revenue.ticketPrice > 0 && revenue.ticketsSold > 0 && (
-                        <p className="text-[10px] text-emerald-600 dark:text-emerald-400 text-right">
+                        <p className="text-[10px] text-pomor-600 dark:text-pomor-400 text-right">
                           Билеты: {formatCurrency(revenue.ticketPrice * revenue.ticketsSold)}
                         </p>
                       )}
@@ -403,7 +403,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                               type="checkbox"
                               checked={task.done}
                               onChange={(e) => updateTask(task.id, 'done', e.target.checked)}
-                              className="w-3.5 h-3.5 rounded accent-emerald-500"
+                              className="w-3.5 h-3.5 rounded accent-pomor-500"
                             />
                             <span className="text-[10px] text-slate-400">Выполнено</span>
                           </label>
@@ -440,7 +440,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                   ))}
                   <button
                     onClick={() => setTasks((prev) => [...prev, newTask()])}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 border border-dashed border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 hover:text-emerald-500 dark:hover:text-emerald-400 hover:border-emerald-400 text-xs font-medium rounded-xl transition-colors"
+                    className="w-full flex items-center justify-center gap-2 py-2.5 border border-dashed border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 hover:text-pomor-500 dark:hover:text-pomor-400 hover:border-pomor-400 text-xs font-medium rounded-xl transition-colors"
                   >
                     <Plus size={13} /> Добавить задачу
                   </button>
@@ -470,7 +470,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                                   type="time"
                                   value={item.time}
                                   onChange={(e) => updateTimeline(item.id, 'time', e.target.value)}
-                                  className="w-full px-2 py-1.5 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-all"
+                                  className="w-full px-2 py-1.5 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-pomor-500/40 transition-all"
                                 />
                               </div>
                               <TextInput
@@ -492,7 +492,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                   </div>
                   <button
                     onClick={() => setTimeline((prev) => [...prev, newTimelineItem()])}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 border border-dashed border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 hover:text-emerald-500 dark:hover:text-emerald-400 hover:border-emerald-400 text-xs font-medium rounded-xl transition-colors"
+                    className="w-full flex items-center justify-center gap-2 py-2.5 border border-dashed border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 hover:text-pomor-500 dark:hover:text-pomor-400 hover:border-pomor-400 text-xs font-medium rounded-xl transition-colors"
                   >
                     <Plus size={13} /> Добавить шаг
                   </button>
@@ -523,7 +523,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
                                   : 'Постов нет'}
                               </p>
                             </div>
-                            <span className="text-[10px] text-emerald-500 font-medium ml-3 flex-shrink-0">
+                            <span className="text-[10px] text-pomor-500 font-medium ml-3 flex-shrink-0">
                               Открыть →
                             </span>
                           </button>
@@ -545,7 +545,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
               {/* Save button */}
               <button
                 onClick={handleSave}
-                className="w-full flex items-center justify-center gap-2 py-3 mt-5 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-lg shadow-emerald-500/25"
+                className="w-full flex items-center justify-center gap-2 py-3 mt-5 bg-pomor-500 hover:bg-pomor-600 active:bg-pomor-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-lg shadow-pomor-500/25"
               >
                 <Check size={15} />
                 Сохранить мероприятие

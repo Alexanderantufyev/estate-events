@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { motion } from 'framer-motion'
 import {
   ArrowUpDown,
@@ -64,9 +64,9 @@ export function EventsTable() {
     if (sort.key !== col)
       return <ArrowUpDown size={11} className="text-slate-400" />
     return sort.dir === 'asc' ? (
-      <ArrowUp size={11} className="text-emerald-500" />
+      <ArrowUp size={11} className="text-pomor-500" />
     ) : (
-      <ArrowDown size={11} className="text-emerald-500" />
+      <ArrowDown size={11} className="text-pomor-500" />
     )
   }
 
@@ -165,7 +165,7 @@ export function EventsTable() {
                     {STATUS_LABELS[row.status]}
                   </Badge>
                 </td>
-                <td className="px-4 py-3 text-right text-sm text-emerald-600 dark:text-emerald-400 font-medium whitespace-nowrap">
+                <td className="px-4 py-3 text-right text-sm text-pomor-600 dark:text-pomor-400 font-medium whitespace-nowrap">
                   {formatCurrency(row.metrics.totalRevenue)}
                 </td>
                 <td className="px-4 py-3 text-right text-sm text-red-500 dark:text-red-400 font-medium whitespace-nowrap">
@@ -175,7 +175,7 @@ export function EventsTable() {
                   <span
                     className={cn(
                       'text-sm font-semibold flex items-center justify-end gap-1',
-                      row.metrics.netProfit >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500 dark:text-red-400'
+                      row.metrics.netProfit >= 0 ? 'text-pomor-600 dark:text-pomor-400' : 'text-red-500 dark:text-red-400'
                     )}
                   >
                     {row.metrics.netProfit >= 0 ? (
