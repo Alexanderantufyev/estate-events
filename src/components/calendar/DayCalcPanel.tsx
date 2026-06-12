@@ -293,13 +293,13 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
             </div>
 
             {/* Tabs */}
-            <div className="px-5 pt-3 flex-shrink-0">
-              <div className="flex gap-1 bg-slate-100 dark:bg-slate-800 rounded-xl p-1">
+            <div className="px-3 pt-3 flex-shrink-0">
+              <div className="flex gap-1 bg-slate-100 dark:bg-slate-800 rounded-xl p-1 overflow-x-auto no-scrollbar">
                 {TABS.map((t) => (
                   <button
                     key={t.key}
                     onClick={() => setTab(t.key)}
-                    className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg transition-all ${
+                    className={`flex-1 flex-shrink-0 flex items-center justify-center gap-1 px-2 py-2 text-xs font-medium rounded-lg transition-all whitespace-nowrap ${
                       tab === t.key
                         ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-sm'
                         : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
