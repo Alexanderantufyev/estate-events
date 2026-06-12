@@ -198,7 +198,7 @@ export function DayCalcPanel({ date, onClose }: DayCalcPanelProps) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 260 }}
-            className="fixed right-0 top-0 h-full w-[calc(100vw-48px)] max-w-[440px] bg-white dark:bg-slate-900 z-50 shadow-2xl shadow-black/20 flex flex-col overflow-hidden"
+            className="fixed right-0 top-0 h-full w-[calc(100vw-24px)] max-w-[440px] bg-white dark:bg-slate-900 z-50 shadow-2xl shadow-black/20 flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-start justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex-shrink-0">
